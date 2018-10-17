@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="bootstrap_red">#d9534f	</color>
+    <color name="bootstrap_white">#f9f9f9</color>
+    <color name="bootstrap_light_blue">#5bc0de</color>
+    <color name="bootstrap_green">#5cb85c</color>
+    <color name="bootstrap_blue">#428bca</color>
+
+    <color name="github_black">#24292e</color>
+    <color name="github_light_black">#2b3137</color>
+    <color name="github_dark_white">#fafbfc</color>
+    <color name="github_white">#ffffff</color>
+    <color name="github_green">#2dba4e</color>
+</resources>
