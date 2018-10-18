@@ -1,7 +1,12 @@
 package com.mansourappdevelopment.androidapp.encdec;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
@@ -32,9 +37,14 @@ public class EncryptionFragment extends Fragment {
     private TextInputEditText mEditTextKey;
     private TextView mTextViewCipherText;
     private Button mBtnEncrypt;
+    private FloatingActionButton mFabShare;
+    private FloatingActionButton mFabCopy;
     private Spinner mSpinnerAlgorithms;
     private ArrayAdapter<String> mSpinnerAdapter;
-    List<String> alogrithmsList;
+    private List<String> alogrithmsList;
+
+    //mAlgorithmFlag is used to determine which algorithm -> 1 for caesar and 2 for play fair
+    private int mAlgorithmFlag = 1;
 
     private TextWatcher mTextWatcher = new TextWatcher() {
         @Override
@@ -44,16 +54,19 @@ public class EncryptionFragment extends Fragment {
 
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            if (mEditTextKey.getText().toString().equals("")){
+            if (mEditTextKey.getText().toString().equals("")) {
                 return;
             }
             if (Integer.parseInt(mEditTextKey.getText().toString()) > 26) {
                 mTextLayoutKey.setErrorEnabled(true);
                 mTextLayoutKey.setError("Should be lower than 26");
                 mBtnEncrypt.setEnabled(false);
+                mBtnEncrypt.setBackground(getActivity().getResources().getDrawable(R.drawable.button_encrypt_disabled));
             } else {
                 mTextLayoutKey.setErrorEnabled(false);
                 mBtnEncrypt.setEnabled(true);
+                mBtnEncrypt.setBackground(getActivity().getResources().getDrawable(R.drawable.button_encrypt));
+
             }
 
         }
@@ -102,11 +115,13 @@ public class EncryptionFragment extends Fragment {
                 } else {
                     mTextLayoutPlainText.setErrorEnabled(false);
                 }
-                if (!mEditTextKey.getText().toString().equals("") && !mEditTextPlainText.getText().toString().equals("")) {
+                if (!mEditTextKey.getText().toString().equals("") && !mEditTextPlainText.getText().toString().equals("") && mAlgorithmFlag == 1) {
 
                     CaesarCipher caesarCipher = new
                             CaesarCipher(mEditTextPlainText.getText().toString(), Integer.parseInt(mEditTextKey.getText().toString()));
                     mTextViewCipherText.setText(caesarCipher.plainToCipher());
+                } else if (!mEditTextKey.getText().toString().equals("") && !mEditTextPlainText.getText().toString().equals("") && mAlgorithmFlag == 2) {
+                    Toast.makeText(getActivity(), "Play Fair isn't implemnted yet!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -126,10 +141,10 @@ public class EncryptionFragment extends Fragment {
                 String algorithmName = adapterView.getItemAtPosition(i).toString();
                 switch (algorithmName) {
                     case "Caesar Cipher":
-                        Toast.makeText(getActivity(), "Caesar", Toast.LENGTH_SHORT).show();
+                        mAlgorithmFlag = 1;
                         break;
                     case "Play Fair":
-                        Toast.makeText(getActivity(), "Play Fair", Toast.LENGTH_SHORT).show();
+                        mAlgorithmFlag = 2;
                         break;
                 }
             }
@@ -137,6 +152,30 @@ public class EncryptionFragment extends Fragment {
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
+            }
+        });
+
+        mFabCopy = (FloatingActionButton) view.findViewById(R.id.fabCopy);
+        mFabCopy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!mTextViewCipherText.getText().toString().equals("")) {
+                    ClipboardManager clipboardManager = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clipData = ClipData.newPlainText("Cipher Text", mTextViewCipherText.getText().toString());
+                    clipboardManager.setPrimaryClip(clipData);
+                    Toast.makeText(getActivity(), "Text copied to the clipboard", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        mFabShare = (FloatingActionButton) view.findViewById(R.id.fabShare);
+        mFabShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent mSharingIntent = new Intent(Intent.ACTION_SEND);
+                mSharingIntent.setType("text/plain");
+                mSharingIntent.putExtra(Intent.EXTRA_TEXT, mTextViewCipherText.getText().toString());
+                startActivity(Intent.createChooser(mSharingIntent, "Share via"));
             }
         });
     }

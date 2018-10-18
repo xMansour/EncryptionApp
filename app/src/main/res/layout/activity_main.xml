@@ -18,7 +18,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/github_dark_white"
+        android:background="@color/github_black"
+        app:itemTextColor="@color/github_white"
+        app:itemIconTint="@color/github_white"
         app:menu="@menu/bottom_navigation" />
 
 </RelativeLayout>
