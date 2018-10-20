@@ -195,10 +195,12 @@ public class DecryptionFragment extends Fragment {
         mFabShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent mSharingIntent = new Intent(Intent.ACTION_SEND);
-                mSharingIntent.setType("text/plain");
-                mSharingIntent.putExtra(Intent.EXTRA_TEXT, mTextViewPlainText.getText().toString());
-                startActivity(Intent.createChooser(mSharingIntent, "Share via"));
+                if (!mTextViewPlainText.getText().toString().equals("")) {
+                    Intent mSharingIntent = new Intent(Intent.ACTION_SEND);
+                    mSharingIntent.setType("text/plain");
+                    mSharingIntent.putExtra(Intent.EXTRA_TEXT, mTextViewPlainText.getText().toString());
+                    startActivity(Intent.createChooser(mSharingIntent, "Share via"));
+                }
             }
         });
     }
