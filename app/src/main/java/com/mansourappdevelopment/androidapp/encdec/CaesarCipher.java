@@ -27,7 +27,7 @@ public class CaesarCipher {
             //if char(i)'s ascii is more than the ascii code of z (122) -> reset to a (97) + (the new cipher char's ascii - the normal
             //text) - ( the left characters until z (122) + 1 for reseting to ascii of a (97)
             if (ascii > asciiZ)
-                ascii = asciiA + (ascii - temp - (asciiZ - temp + 1));
+                ascii = asciiA + ((mKey - 1) - (asciiZ - temp));
             mCipherText += (char) ascii;
         }
         return mCipherText;
@@ -41,7 +41,7 @@ public class CaesarCipher {
             //if char(i)'s ascii is more than the ascii code of z (122) -> reset to a (97) + (the new cipher char's ascii - the normal
             //text) - ( the left characters until z (122) + 1 for reseting to ascii of z (122)
             if (ascii < asciiA)
-                ascii = asciiZ - (temp - ascii - (temp - asciiA + 1));
+                ascii = asciiZ - ((mKey - 1) - (temp - asciiA));
             mPlainText += (char) ascii;
         }
         return mPlainText;
