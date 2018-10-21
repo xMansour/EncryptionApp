@@ -4,6 +4,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -13,6 +14,7 @@ import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +51,31 @@ public class EncryptionFragment extends Fragment {
     //mAlgorithmFlag is used to determine which algorithm -> 1 for caesar and 2 for play fair
     private int mAlgorithmFlag = 1;
 
+    private TextWatcher mTextWatcherInput = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            if (mEditTextPlainText.getText().toString().matches(".*\\d+.*")) {
+                mTextLayoutPlainText.setErrorEnabled(true);
+                mTextLayoutPlainText.setError("Plain text can't contain a number");
+                mBtnEncrypt.setEnabled(false);
+                mBtnEncrypt.setBackground(getActivity().getResources().getDrawable(R.drawable.button_encrypt_disabled));
+            } else {
+                mTextLayoutPlainText.setErrorEnabled(false);
+                mBtnEncrypt.setEnabled(true);
+                mBtnEncrypt.setBackground(getActivity().getResources().getDrawable(R.drawable.button_encrypt));
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+
+        }
+    };
     private TextWatcher mTextWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -82,7 +111,6 @@ public class EncryptionFragment extends Fragment {
                 mBtnEncrypt.setBackground(getActivity().getResources().getDrawable(R.drawable.button_encrypt));
             }
 
-
         }
 
         @Override
@@ -105,6 +133,7 @@ public class EncryptionFragment extends Fragment {
         mTextLayoutKey = (TextInputLayout) view.findViewById(R.id.layoutTextKey);
 
         mEditTextPlainText = (TextInputEditText) view.findViewById(R.id.editTextPlainText);
+        mEditTextPlainText.addTextChangedListener(mTextWatcherInput);
         mEditTextKey = (TextInputEditText) view.findViewById(R.id.editTextKey);
         mEditTextKey.addTextChangedListener(mTextWatcher);
 
@@ -135,8 +164,8 @@ public class EncryptionFragment extends Fragment {
                             CaesarCipher(mEditTextPlainText.getText().toString(), Integer.parseInt(mEditTextKey.getText().toString()));
                     mTextViewCipherText.setText(caesarCipher.plainToCipher());
                 } else if (!mEditTextKey.getText().toString().equals("") && !mEditTextPlainText.getText().toString().equals("") && mAlgorithmFlag == 2) {
-                    PlayFairCipher playFiarCipher = new PlayFairCipher(mEditTextPlainText.getText().toString(), mEditTextKey.getText().toString());
-                    mTextViewCipherText.setText(playFiarCipher.plainToCipher());
+                    PlayFairCipher playFairCipher = new PlayFairCipher(mEditTextPlainText.getText().toString(), mEditTextKey.getText().toString());
+                    mTextViewCipherText.setText(playFairCipher.plainToCipher());
                 }
             }
         });
@@ -215,4 +244,5 @@ public class EncryptionFragment extends Fragment {
         }
         return false;
     }
+
 }

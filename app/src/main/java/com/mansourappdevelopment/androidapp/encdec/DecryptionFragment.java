@@ -46,7 +46,31 @@ public class DecryptionFragment extends Fragment {
 
     //mAlgorithmFlag is used to determine which algorithm -> 1 for caesar and 2 for play fair
     private int mAlgorithmFlag = 1;
+    private TextWatcher mTextWatcherInput = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            if (mEditTextCipherText.getText().toString().matches(".*\\d+.*")) {
+                mTextLayoutCipherText.setErrorEnabled(true);
+                mTextLayoutCipherText.setError("Cipher text can't contain a number");
+                mBtnDecrypt.setEnabled(false);
+                mBtnDecrypt.setBackground(getActivity().getResources().getDrawable(R.drawable.button_decrypt_disabled));
+            } else {
+                mTextLayoutCipherText.setErrorEnabled(false);
+                mBtnDecrypt.setEnabled(true);
+                mBtnDecrypt.setBackground(getActivity().getResources().getDrawable(R.drawable.button_decrypt));
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+
+        }
+    };
     private TextWatcher mTextWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -110,6 +134,7 @@ public class DecryptionFragment extends Fragment {
         mTextLayoutKey = (TextInputLayout) view.findViewById(R.id.layoutTextKey);
 
         mEditTextCipherText = (TextInputEditText) view.findViewById(R.id.editTextCipherText);
+        mEditTextCipherText.addTextChangedListener(mTextWatcherInput);
         mEditTextKey = (TextInputEditText) view.findViewById(R.id.editTextKey);
         mEditTextKey.addTextChangedListener(mTextWatcher);
 
