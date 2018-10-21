@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import hotchemi.android.rate.AppRate;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,6 +42,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //Rating the app
+        AppRate.with(this)
+                .setInstallDays(1)
+                .setLaunchTimes(3)
+                .setRemindInterval(2)
+                .monitor();
+        AppRate.showRateDialogIfMeetsConditions(this);
 
     }
 
