@@ -93,22 +93,28 @@ public class EncryptionFragment extends Fragment {
                     mTextLayoutKey.setError("Should be lower than 26");
                     mBtnEncrypt.setEnabled(false);
                     mBtnEncrypt.setBackground(getActivity().getResources().getDrawable(R.drawable.button_encrypt_disabled));
+                } else {
+                    mTextLayoutKey.setErrorEnabled(false);
+                    mBtnEncrypt.setEnabled(true);
+                    mBtnEncrypt.setBackground(getActivity().getResources().getDrawable(R.drawable.button_encrypt));
                 }
 
-            } else if (mEditTextKey.getText().toString().matches(".*\\d+.*")) {
-                mTextLayoutKey.setErrorEnabled(true);
-                mTextLayoutKey.setError("Key can't contain a number");
-                mBtnEncrypt.setEnabled(false);
-                mBtnEncrypt.setBackground(getActivity().getResources().getDrawable(R.drawable.button_encrypt_disabled));
-            } else if (checkForDuplicate()) {
-                mTextLayoutKey.setErrorEnabled(true);
-                mTextLayoutKey.setError("Key should be unique");
-                mBtnEncrypt.setEnabled(false);
-                mBtnEncrypt.setBackground(getActivity().getResources().getDrawable(R.drawable.button_encrypt_disabled));
             } else {
-                mTextLayoutKey.setErrorEnabled(false);
-                mBtnEncrypt.setEnabled(true);
-                mBtnEncrypt.setBackground(getActivity().getResources().getDrawable(R.drawable.button_encrypt));
+                if (mEditTextKey.getText().toString().matches(".*\\d+.*")) {
+                    mTextLayoutKey.setErrorEnabled(true);
+                    mTextLayoutKey.setError("Key can't contain a number");
+                    mBtnEncrypt.setEnabled(false);
+                    mBtnEncrypt.setBackground(getActivity().getResources().getDrawable(R.drawable.button_encrypt_disabled));
+                } else if (checkForDuplicate()) {
+                    mTextLayoutKey.setErrorEnabled(true);
+                    mTextLayoutKey.setError("Key should be unique");
+                    mBtnEncrypt.setEnabled(false);
+                    mBtnEncrypt.setBackground(getActivity().getResources().getDrawable(R.drawable.button_encrypt_disabled));
+                } else {
+                    mTextLayoutKey.setErrorEnabled(false);
+                    mBtnEncrypt.setEnabled(true);
+                    mBtnEncrypt.setBackground(getActivity().getResources().getDrawable(R.drawable.button_encrypt));
+                }
             }
 
         }

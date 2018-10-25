@@ -94,22 +94,24 @@ public class DecryptionFragment extends Fragment {
                     mBtnDecrypt.setBackground(getActivity().getResources().getDrawable(R.drawable.button_decrypt));
                 }
 
-            } else if (mEditTextKey.getText().toString().matches(".*\\d+.*")) {
-                mTextLayoutKey.setErrorEnabled(true);
-                mTextLayoutKey.setError("Key can't contain a number");
-                mBtnDecrypt.setEnabled(false);
-                mBtnDecrypt.setBackground(getActivity().getResources().getDrawable(R.drawable.button_decrypt_disabled));
-            } else if (checkForDuplicate()) {
-                mTextLayoutKey.setErrorEnabled(true);
-                mTextLayoutKey.setError("Key should be unique");
-                mBtnDecrypt.setEnabled(false);
-                mBtnDecrypt.setBackground(getActivity().getResources().getDrawable(R.drawable.button_decrypt_disabled));
             } else {
-                mTextLayoutKey.setErrorEnabled(false);
-                mBtnDecrypt.setEnabled(true);
-                mBtnDecrypt.setBackground(getActivity().getResources().getDrawable(R.drawable.button_decrypt));
-            }
+                if (mEditTextKey.getText().toString().matches(".*\\d+.*")) {
+                    mTextLayoutKey.setErrorEnabled(true);
+                    mTextLayoutKey.setError("Key can't contain a number");
+                    mBtnDecrypt.setEnabled(false);
+                    mBtnDecrypt.setBackground(getActivity().getResources().getDrawable(R.drawable.button_decrypt_disabled));
+                } else if (checkForDuplicate()) {
+                    mTextLayoutKey.setErrorEnabled(true);
+                    mTextLayoutKey.setError("Key should be unique");
+                    mBtnDecrypt.setEnabled(false);
+                    mBtnDecrypt.setBackground(getActivity().getResources().getDrawable(R.drawable.button_decrypt_disabled));
+                } else {
+                    mTextLayoutKey.setErrorEnabled(false);
+                    mBtnDecrypt.setEnabled(true);
+                    mBtnDecrypt.setBackground(getActivity().getResources().getDrawable(R.drawable.button_decrypt));
+                }
 
+            }
         }
 
         @Override
